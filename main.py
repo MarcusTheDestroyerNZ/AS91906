@@ -1,10 +1,14 @@
 from tkinter import *
 import json
+from tkinter import ttk
 
 window = Tk()
 window.geometry("1280x720")
 window.title("Student Management System")
 window.config(background="grey")
+
+style = ttk.Style()
+style.configure("TLabel", font=("Arial", 12, "bold"), background="lightblue", foreground="black")
 
 main_page_frame = Frame(window, bg="grey")
 
@@ -42,7 +46,7 @@ def open_main_page():
     student_page_frame.place_forget()
     main_page_frame.place(**place_frame_values)
 
-    title = Label(main_page_frame, text="Student Management System", width=20)
+    title = ttk.Label(main_page_frame, text="Student Management System", width=20, style="TLabel")
 
     admin_button = Button(main_page_frame, text="Admin", command=open_admin_page)
     student_button = Button(main_page_frame, text="Student", command=open_student_page)
