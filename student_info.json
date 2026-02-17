@@ -1,0 +1,60 @@
+{
+    "students": [
+        {
+            "id": 1,
+            "first_name": "Marcus",
+            "last_name": "White",
+            "dob": "1995-08-15",
+            "email": "mwhite@gmail.com"
+        },
+        {
+            "id": 2,
+            "first_name": "Sophia",
+            "last_name": "Johnson",
+            "dob": "1996-05-22",
+            "email": "sjohnson@gmail.com"
+        },
+        {
+            "id": 3,
+            "first_name": "Liam",
+            "last_name": "Brown",
+            "dob": "1994-12-10",
+            "email": "lbrown@gmail.com"
+        },
+        {
+            "id": 4,
+            "first_name": "Olivia",
+            "last_name": "Davis",
+            "dob": "1997-03-30",
+            "email": "odavis@gmail.com"
+        }
+    ],
+    "teachers": [
+        {
+            "id": 1,
+            "first_name": "Emily",
+            "last_name": "Smith",
+            "email": "emily.smith@gmail.com"
+        },
+        {
+            "id": 2,
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "john.doe@gmail.com"
+        }
+    ],
+    "classes": [
+        {
+            "id": 1,
+            "name": "Mathematics",
+            "teacher_id": 1,
+            "student_ids": [1, 2, 4]
+        },
+        {
+            "id": 2,
+            "name": "Science",
+            "teacher_id": 2,
+            "student_ids": [2, 4]
+        }
+    ]
+}
