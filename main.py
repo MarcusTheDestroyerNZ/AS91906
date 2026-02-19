@@ -7,7 +7,6 @@ from pages.view_students_page import load_view_students_page
 from pages.view_classes_page import load_view_classes_page
 from pages.add_or_remove_students_page import load_add_or_remove_students_page
 
-
 window = Tk()
 window.geometry("1280x720")
 window.title("Student Management System")
@@ -41,10 +40,8 @@ def show_frame(frame):
     clear_all_frames()
     frame.place(**place_frame_values)
 
-
 def open_main_page():
     show_frame(main_page_frame)
-
 
 def open_student_management_page():
     show_frame(student_management_frame)
@@ -57,7 +54,6 @@ def open_view_students_page():
 
 def open_view_classes_page():
     show_frame(view_classes_frame)
-
 
 def exit_program():
     window.destroy()

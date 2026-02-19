@@ -3,44 +3,34 @@
         {
             "id": 1,
             "first_name": "Marcus",
-            "last_name": "White",
-            "dob": "1995-08-15",
-            "email": "mwhite@gmail.com"
+            "last_name": "White"
         },
         {
             "id": 2,
             "first_name": "Sophia",
-            "last_name": "Johnson",
-            "dob": "1996-05-22",
-            "email": "sjohnson@gmail.com"
+            "last_name": "Johnson"
         },
         {
             "id": 3,
             "first_name": "Liam",
-            "last_name": "Brown",
-            "dob": "1994-12-10",
-            "email": "lbrown@gmail.com"
+            "last_name": "Brown"
         },
         {
             "id": 4,
             "first_name": "Olivia",
-            "last_name": "Davis",
-            "dob": "1997-03-30",
-            "email": "odavis@gmail.com"
+            "last_name": "Davis"
         }
     ],
     "teachers": [
         {
             "id": 1,
             "first_name": "Emily",
-            "last_name": "Smith",
-            "email": "emily.smith@gmail.com"
+            "last_name": "Smith"
         },
         {
             "id": 2,
             "first_name": "John",
-            "last_name": "Doe",
-            "email": "john.doe@gmail.com"
+            "last_name": "Doe"
         }
     ],
     "classes": [

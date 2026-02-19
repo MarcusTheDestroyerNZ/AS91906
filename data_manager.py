@@ -7,8 +7,6 @@ class Student:
     id: int
     first_name: str
     last_name: str
-    dob: str
-    email: str
 
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
@@ -18,7 +16,6 @@ class Teacher:
     id: int
     first_name: str
     last_name: str
-    email: str
 
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
