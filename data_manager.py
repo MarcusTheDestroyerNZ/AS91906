@@ -7,6 +7,7 @@ class Student:
     id: int
     first_name: str
     last_name: str
+    grades: list
 
     def full_name(self):
         return f"{self.first_name} {self.last_name}"

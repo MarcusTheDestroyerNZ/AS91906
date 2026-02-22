@@ -3,22 +3,36 @@
         {
             "id": 1,
             "first_name": "Marcus",
-            "last_name": "White"
+            "last_name": "White",
+            "grades": [
+                {"class_id": 2, "grade": "B+"}
+            ]
         },
         {
             "id": 2,
             "first_name": "Sophia",
-            "last_name": "Johnson"
+            "last_name": "Johnson",
+            "grades": [
+                {"class_id": 1, "grade": "A"},
+                {"class_id": 2, "grade": "B+"}
+            ]
         },
         {
             "id": 3,
             "first_name": "Liam",
-            "last_name": "Brown"
+            "last_name": "Brown",
+            "grades": [
+                {"class_id": 2, "grade": "A"}
+            ]
         },
         {
             "id": 4,
             "first_name": "Olivia",
-            "last_name": "Davis"
+            "last_name": "Davis",
+            "grades": [
+                {"class_id": 1, "grade": "C"},
+                {"class_id": 2, "grade": "B"}
+            ]
         }
     ],
     "teachers": [
@@ -44,7 +58,7 @@
             "id": 2,
             "name": "Science",
             "teacher_id": 2,
-            "student_ids": [2, 4]
+            "student_ids": [2, 3, 4]
         }
     ]
 }
