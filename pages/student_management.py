@@ -1,41 +1,60 @@
 from tkinter import *
+from tkinter import simpledialog
+from tkinter.ttk import Treeview
+
+from data_manager import Student
 
 def load_student_management_page(frame, data_manager, callbacks):
+    data_manager.load_student_info()
+
     back_button = Button(frame, text="Back", command=callbacks['back'])
     back_button.place(relx=0.2, rely=0.1, relwidth=0.1, relheight=0.05, anchor=CENTER)
 
     title = Label(frame, text="Student Management Page")
+
+    student_list_label = Label(frame, text="Students in School")
+
+    headings = ["ID", "Name"]
+    student_list = Treeview(frame, columns=("ID", "Name"), show="headings")
+
+    for heading in headings:
+        student_list.heading(heading, text=heading)
+    
+    student_list.column("ID", width=10, stretch=True)
+    student_list.column("Name", width=200, stretch=True)
+
+    for student in data_manager.students:
+        student_list.insert("", "end", values=(student.id, student.full_name()))
+
+    edit_student_button = Button(frame, text="Edit")
+    remove_student_button = Button(frame, text="Remove")
+
     title.place(relx=0.5, rely=0.1, relwidth=0.2, relheight=0.05, anchor=CENTER)
 
-    view_add_student_page_button = Button(frame, text="Add/Remove Students", command= callbacks['add_or_remove_students'])
-    view_add_student_page_button.place(relx=0.5, rely=0.25, relwidth=0.1, relheight=0.05, anchor=CENTER)
+    student_list_label.place(relx=0.5, rely=0.2, relwidth=0.1, relheight=0.05, anchor=CENTER)
+    student_list.place(relx=0.5, rely=0.35, relwidth=0.2, relheight=0.2, anchor=CENTER)
 
-    student_drop_down_label = Label(frame, text="Add")
-    student_drop_down_label.place(relx=0.4, rely=0.5, relwidth=0.1, relheight=0.05, anchor=W)
+    edit_student_button.place(relx=0.4, rely=0.5, relwidth=0.1, relheight=0.05, anchor=CENTER)
+    remove_student_button.place(relx=0.6, rely=0.5, relwidth=0.1, relheight=0.05, anchor=CENTER)
 
-    student_drop_down = OptionMenu(frame, StringVar(), *[student.full_name() for student in data_manager.students])
-    student_drop_down.place(relx=0.6, rely=0.5, relwidth=0.1, relheight=0.05, anchor=E)
+    add_student_first_name_label = Label(frame, text="First Name:")
+    add_student_last_name_label = Label(frame, text="Last Name:")
 
-    class_drop_down_label = Label(frame, text="to")
-    class_drop_down_label.place(relx=0.4, rely=0.55, relwidth=0.1, relheight=0.05, anchor=W)
+    add_student_first_name_entry = Entry(frame)
+    add_student_last_name_entry = Entry(frame)
 
-    class_drop_down = OptionMenu(frame, StringVar(), *[class_.name for class_ in data_manager.classes])
-    class_drop_down.place(relx=0.6, rely=0.55, relwidth=0.1, relheight=0.05, anchor=E)    
+    add_student_button = Button(frame, text="Add Student", command=lambda: add_student(data_manager, add_student_first_name_entry.get(), add_student_last_name_entry.get()))
 
-    add_to_class_button = Button(frame, text="Add to Class", command=lambda: print(f"Adding {student_drop_down.cget('text')} to {class_drop_down.cget('text')}"))
-    add_to_class_button.place(relx=0.5, rely=0.6, relwidth=0.1, relheight=0.05, anchor=CENTER)
+    add_student_first_name_label.place(relx=0.45, rely=0.75, relwidth=0.1, relheight=0.05, anchor=CENTER)
+    add_student_last_name_label.place(relx=0.55, rely=0.75, relwidth=0.1, relheight=0.05, anchor=CENTER)
 
-    remove_student_label = Label(frame, text="Remove")
-    remove_student_label.place(relx=0.4, rely=0.7, relwidth=0.1, relheight=0.05, anchor=W)
+    add_student_first_name_entry.place(relx=0.45, rely=0.8, relwidth=0.1, relheight=0.05, anchor=CENTER)
+    add_student_last_name_entry.place(relx=0.55, rely=0.8, relwidth=0.1, relheight=0.05, anchor=CENTER)
 
-    remove_student_drop_down = OptionMenu(frame, StringVar(), *[student.full_name() for student in data_manager.students])
-    remove_student_drop_down.place(relx=0.6, rely=0.7, relwidth=0.1, relheight=0.05, anchor=E)
+    add_student_button.place(relx=0.5, rely=0.9, relwidth=0.1, relheight=0.05, anchor=CENTER)
 
-    remove_from_class_label = Label(frame, text="from")
-    remove_from_class_label.place(relx=0.4, rely=0.75, relwidth=0.1, relheight=0.05, anchor=W)
-
-    remove_from_class_drop_down = OptionMenu(frame, StringVar(), *[class_.name for class_ in data_manager.classes])
-    remove_from_class_drop_down.place(relx=0.6, rely=0.75, relwidth=0.1, relheight=0.05, anchor=E)
-
-    remove_from_class_button = Button(frame, text="Remove from Class", command=lambda: print(f"Removing {remove_student_drop_down.cget('text')} from {remove_from_class_drop_down.cget('text')}"))
-    remove_from_class_button.place(relx=0.5, rely=0.8, relwidth=0.1, relheight=0.05, anchor=CENTER)
+def add_student(data_manager, first_name, last_name):
+    new_id = max(student.id for student in data_manager.students) + 1 if data_manager.students else 1
+    data_manager.students.append(Student(id=new_id, first_name=first_name, last_name=last_name, grades=[]))
+    data_manager.save_student_info()
+    print(f"Added student: {first_name} {last_name} with ID {new_id}")
