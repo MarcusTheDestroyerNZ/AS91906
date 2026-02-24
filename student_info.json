@@ -59,18 +59,6 @@
                     "grade": "B"
                 }
             ]
-        },
-        {
-            "id": 5,
-            "first_name": "Mark",
-            "last_name": "Antony",
-            "grades": []
-        },
-        {
-            "id": 6,
-            "first_name": "Tom",
-            "last_name": "Clarke",
-            "grades": []
         }
     ],
     "teachers": [
