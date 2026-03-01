@@ -7,7 +7,7 @@ from data_manager import Student
 def load_student_management_page(frame, data_manager, callbacks):
     data_manager.load_student_info()
 
-    back_button = Button(frame, text="Back", command=callbacks['back'])
+    back_button = Button(frame, text="Back", command=lambda: back_to_student_management(callbacks, frame))
     back_button.place(relx=0.2, rely=0.1, relwidth=0.1, relheight=0.05, anchor=CENTER)
 
     title = Label(frame, text="Student Management Page")
@@ -26,8 +26,12 @@ def load_student_management_page(frame, data_manager, callbacks):
     for student in data_manager.students:
         student_list.insert("", "end", values=(student.id, student.full_name()))
 
-    edit_student_button = Button(frame, text="Edit", command=lambda: edit_student(callbacks))
+    edit_student_button = Button(frame, text="Edit", command=lambda: edit_student(frame, callbacks, data_manager=data_manager, student_id=student_list.item(student_list.focus())['values'][0]))
     remove_student_button = Button(frame, text="Remove", command=lambda: remove_student(data_manager, student_list.item(student_list.focus())['values'][0], student_list))
+
+    student_list.bind("<<TreeviewSelect>>", lambda event: on_student_select(event, edit_student_button, remove_student_button))
+    edit_student_button.config(state=DISABLED)
+    remove_student_button.config(state=DISABLED)
 
     title.place(relx=0.5, rely=0.1, relwidth=0.2, relheight=0.05, anchor=CENTER)
 
@@ -55,9 +59,26 @@ def load_student_management_page(frame, data_manager, callbacks):
 
     add_student_button.place(relx=0.5, rely=0.9, relwidth=0.1, relheight=0.05, anchor=CENTER)
 
-def edit_student(callbacks):
-    callbacks['edit_student']()
+def on_student_select(event, edit_student_button, remove_student_button):
+    selected_item = event.widget.selection()
+    print(f"Selected item: {selected_item}")
+    if selected_item:
+        edit_student_button.config(state=NORMAL)
+        remove_student_button.config(state=NORMAL)
+    else:
+        edit_student_button.config(state=DISABLED)
+        remove_student_button.config(state=DISABLED)
 
+def edit_student(frame, callbacks, data_manager=None, student_id=None):
+    edit_student_frame = callbacks['edit_student']
+
+    student_name = next((student.full_name() for student in data_manager.students if student.id == student_id), "Unknown Student")
+
+    edit_student_label = Label(edit_student_frame, text=f"Editing {student_name}...")
+    edit_student_label.place(relx=0.5, rely=0.1, relwidth=0.3, relheight=0.05, anchor=CENTER)
+
+    edit_student_frame.place(relx=0.5, rely=0.5, relwidth=1, relheight=1, anchor=CENTER)
+    
 def remove_student(data_manager, student_id, student_list):
     student_to_remove = next((student for student in data_manager.students if student.id == student_id), None)
     if student_to_remove:
@@ -81,3 +102,7 @@ def reload_student_list(data_manager, student_list):
     student_list.delete(*student_list.get_children())
     for student in data_manager.students:
         student_list.insert("", "end", values=(student.id, student.full_name()))
+
+def back_to_student_management(callbacks, edit_student_frame):
+    edit_student_frame.place_forget()
+    callbacks['back']()

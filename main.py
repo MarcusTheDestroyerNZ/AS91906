@@ -26,7 +26,7 @@ frames = {
     "teacher_management": teacher_management_frame,
     "view_students": view_students_frame,
     "view_classes": view_classes_frame,
-    "add_or_remove_students": edit_students_frame
+    "edit_students": edit_students_frame,
 }
 
 place_frame_values = {"relx": 0.5, "rely": 0.5, "relwidth": 1, "relheight": 1, "anchor": CENTER}
@@ -57,7 +57,7 @@ def open_view_students_page():
 def open_view_classes_page():
     show_frame(view_classes_frame)
 
-def open_edit_students_page():
+def open_edit_students_page(student=None):
     show_frame(edit_students_frame)
 
 def exit_program():
@@ -67,7 +67,7 @@ def load_pages():
     main_callbacks = {'exit_app': exit_program, 'student_management': open_student_management_page, 'teacher_management': open_teacher_management_page, 'view_students': open_view_students_page, 'view_classes': open_view_classes_page}
     load_main_page(main_page_frame, main_callbacks)
 
-    student_management_callbacks = {'back': open_main_page, 'edit_student': open_edit_students_page}
+    student_management_callbacks = {'back': open_main_page, 'edit_student': edit_students_frame}
     load_student_management_page(student_management_frame, data_manager, student_management_callbacks)
 
     teacher_management_callbacks = {'back': open_main_page}
@@ -79,8 +79,8 @@ def load_pages():
     view_classes_callbacks = {'back': open_main_page}
     load_view_classes_page(view_classes_frame, data_manager, view_classes_callbacks)
 
-    add_or_remove_students_callbacks = {'back': open_student_management_page}
-    load_edit_students_page(edit_students_frame, data_manager, add_or_remove_students_callbacks)
+    edit_students_callbacks = {'back': open_student_management_page}
+    load_edit_students_page(edit_students_frame, data_manager, edit_students_callbacks)
 
 load_pages()
 show_frame(main_page_frame)
