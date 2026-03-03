@@ -89,43 +89,90 @@ def edit_student(callbacks, data_manager, student_id):
     for student in data_manager.students:
         if student.id == student_id:
             grade_info = []
-            for grade in student.grades:
-                grade_info.append(f"Class: {grade['class_id']} Grade: {grade['grade']}")
-            current_selected_student_info_treeview.insert("", "end", values=(student.id, student.full_name(), ", ".join([class_.name for class_ in data_manager.classes if student.id in class_.student_ids]), ", ".join(grade_info)))
+            classes_info = []
+            for classes in student.classes:
+                grade_info.append(f"Class: {classes['class_id']} Grade: {classes['grade']}")
+                classes_info.append(f"{classes['class_name']} (ID: {classes['class_id']})")
+            current_selected_student_info_treeview.insert("", "end", values=(student.id, student.full_name(), ", ".join(classes_info), ", ".join(grade_info)))
 
     current_selected_student_info_treeview.place(relx=0.5, rely=0.2, relwidth=0.8, relheight=0.075, anchor=N)
-    change_classes_button = Button(edit_student_frame, text="Change Classes", command=lambda: edit_student_classes_popup(data_manager, student_id, current_selected_student_info_treeview))
-    change_grades_button = Button(edit_student_frame, text="Change Grades", command=lambda: edit_student_grades_popup(data_manager, student_id, current_selected_student_info_treeview))
 
-    change_classes_button.place(relx=0.6,rely=0.35, relwidth=0.1, relheight=0.05, anchor=CENTER)
-    change_grades_button.place(relx=0.4, rely=0.35, relwidth=0.1, relheight=0.05, anchor=CENTER)
+    classes_options = [f"{class_.name} (ID: {class_.id})" for class_ in data_manager.classes]
+    grades_options = [
+        "A+", "A", "A-", 
+        "B+", "B", "B-", 
+        "C+", "C", "C-", 
+        "D+", "D", "D-",
+        "E+", "E", "E-",
+        "F+", "F", "F-"
+    ]
+
+    classes_option_menu_for_classes = OptionMenu(edit_student_frame, StringVar(), *classes_options)
+    classes_option_menu_for_grades = OptionMenu(edit_student_frame, StringVar(), *classes_options)
+    grades_option_menu = OptionMenu(edit_student_frame, StringVar(), *grades_options)
+
+    add_class_button = Button(edit_student_frame, text="Add Class", command=lambda: add_or_remove_class("add", data_manager, student_id, current_selected_student_info_treeview, classes_option_menu_for_classes))
+    remove_class_button = Button(edit_student_frame, text="Remove Class", command=lambda: add_or_remove_class("remove", data_manager, student_id, current_selected_student_info_treeview, classes_option_menu_for_classes))
+    add_grades_button = Button(edit_student_frame, text="Change Grades", command=lambda: add_grades(data_manager, student_id, current_selected_student_info_treeview, classes_option_menu_for_grades, grades_option_menu))
+
+    classes_option_menu_for_classes.place(relx=0.5, rely=0.3, relwidth=0.1, relheight=0.05, anchor=CENTER)
+    classes_option_menu_for_grades.place(relx=0.45, rely=0.45, relwidth=0.1, relheight=0.05, anchor=CENTER)
+    grades_option_menu.place(relx=0.55, rely=0.45, relwidth=0.1, relheight=0.05, anchor=CENTER)
+
+    add_class_button.place(relx=0.45,rely=0.35, relwidth=0.1, relheight=0.05, anchor=CENTER)
+    remove_class_button.place(relx=0.55, rely=0.35, relwidth=0.1, relheight=0.05, anchor=CENTER)
+    add_grades_button.place(relx=0.5, rely=0.5, relwidth=0.1, relheight=0.05, anchor=CENTER)
 
     edit_student_frame.place(relx=0.5, rely=0.5, relwidth=1, relheight=1, anchor=CENTER)
 
-def edit_student_classes_popup(data_manager, student_id, student_list):
-    new_classes = simpledialog.askstring("Change Classes", "Enter new classes (comma separated):")
-    if new_classes:
+def add_or_remove_class(add_or_remove, data_manager, student_id, student_list, class_option_menu):
+    selected_class = class_option_menu.cget("text")
+    if selected_class:
+        class_id = int(selected_class.split("ID: ")[1].rstrip(")"))
+        class_name = selected_class.split(" (ID:")[0]
         for student in data_manager.students:
             if student.id == student_id:
-                student.classes = [class_.strip() for class_ in new_classes.split(",")]
-                break
-        data_manager.save_student_info()
-        messagebox.showinfo("Classes Change", f"Classes changed to {new_classes}")
-        reload_student_list(data_manager, student_list)
+                if any(c['class_id'] == class_id for c in student.classes):
+                    if add_or_remove == "add":
+                        messagebox.showwarning("Class Exists", f"{student.full_name()} is already enrolled in {class_name}.")
+                        return
+                    else:
+                        student.classes = [c for c in student.classes if c['class_id'] != class_id]
+                        data_manager.save_student_info()
+                        messagebox.showinfo("Class Removed", f"Removed {class_name} from {student.full_name()}.")
+                        reload_student_list(data_manager, student_list)
+                        break
+                else:
+                    if add_or_remove == "remove":
+                        messagebox.showwarning("Class Not Found", f"{student.full_name()} is not enrolled in {class_name}.")
+                        return
+                    else:
+                        student.classes.append({"class_id": class_id, "class_name": class_name, "grade": "N/A"})
+                        data_manager.save_student_info()
+                        messagebox.showinfo("Class Added", f"Added {class_name} to {student.full_name()}.")
+                        reload_student_list(data_manager, student_list)
+                        break
 
-def edit_student_grades_popup(data_manager, student_id, student_list):
-    new_grades = simpledialog.askstring("Change Grades", "Enter new grades (comma separated, format: class_id:grade):")
-    if new_grades:
+def add_grades(data_manager, student_id, student_list, classes_option_menu, grades_option_menu):
+    selected_class = classes_option_menu.cget("text")
+    selected_grade = grades_option_menu.cget("text")
+    print(f"Selected class from dropdown: {selected_class}")
+    if selected_class and selected_grade:
+        class_id = int(selected_class.split("ID: ")[1].rstrip(")"))
+        print(f"Selected class ID: {class_id}, Selected grade: {selected_grade}")
         for student in data_manager.students:
             if student.id == student_id:
-                student.grades = []
-                for grade in new_grades.split(","):
-                    class_id, grade_value = grade.split(":")
-                    student.grades.append({"class_id": int(class_id), "grade": grade_value})
-                break
-        data_manager.save_student_info()
-        messagebox.showinfo("Grades Change", f"Grades changed to {new_grades}")
-        reload_student_list(data_manager, student_list)
+                for classes in student.classes:
+                    print(f"Comparing {class_id} with {classes['class_id']}")
+                    if classes['class_id'] == class_id:
+                        classes['grade'] = selected_grade
+                        data_manager.save_student_info()
+                        messagebox.showinfo("Grade Updated", f"Updated grade for {selected_class.split(' (ID:')[0]} to {selected_grade} for {student.full_name()}.")
+                        reload_student_list(data_manager, student_list)
+                        return
+                    else:
+                        messagebox.showwarning("Class Not Found", f"{student.full_name()} is not enrolled in {selected_class.split(' (ID:')[0]}.")
+                        return
 
 def remove_student(data_manager, student_id, student_list):
     student_to_remove = next((student for student in data_manager.students if student.id == student_id), None)
