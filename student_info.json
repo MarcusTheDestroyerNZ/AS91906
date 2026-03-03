@@ -4,13 +4,15 @@
             "id": 1,
             "first_name": "Marcus",
             "last_name": "White",
-            "grades": [
+            "classes": [
                 {
                     "class_id": 1,
-                    "grade": "B+"
+                    "class_name": "Mathematics",
+                    "grade": "C"
                 },
                 {
-                    "class_id": 3,
+                    "class_id": 2,
+                    "class_name": "Science",
                     "grade": "B"
                 }
             ]
@@ -19,14 +21,16 @@
             "id": 2,
             "first_name": "Sophia",
             "last_name": "Johnson",
-            "grades": [
+            "classes": [
                 {
                     "class_id": 1,
-                    "grade": "A"
+                    "class_name": "Mathematics",
+                    "grade": "C"
                 },
                 {
                     "class_id": 2,
-                    "grade": "B+"
+                    "class_name": "Science",
+                    "grade": "B"
                 }
             ]
         },
@@ -34,14 +38,16 @@
             "id": 3,
             "first_name": "Liam",
             "last_name": "Brown",
-            "grades": [
+            "classes": [
                 {
-                    "class_id": 2,
-                    "grade": "A"
+                    "class_id": 1,
+                    "class_name": "Mathematics",
+                    "grade": "C"
                 },
                 {
-                    "class_id": 3,
-                    "grade": "A-"
+                    "class_id": 2,
+                    "class_name": "Science",
+                    "grade": "B"
                 }
             ]
         },
@@ -49,13 +55,32 @@
             "id": 4,
             "first_name": "Olivia",
             "last_name": "Davis",
-            "grades": [
+            "classes": [
                 {
                     "class_id": 1,
+                    "class_name": "Mathematics",
                     "grade": "C"
                 },
                 {
                     "class_id": 2,
+                    "class_name": "Science",
+                    "grade": "B"
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "first_name": "Dyan",
+            "last_name": "B",
+            "classes": [
+                {
+                    "class_id": 1,
+                    "class_name": "Mathematics",
+                    "grade": "C"
+                },
+                {
+                    "class_id": 2,
+                    "class_name": "Science",
                     "grade": "B"
                 }
             ]

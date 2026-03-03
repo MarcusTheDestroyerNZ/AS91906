@@ -17,9 +17,13 @@ def load_view_students_page(frame, data_manager, callbacks):
         student_tree.heading(heading, text=heading)
         student_tree.column(heading, width=50, stretch=True)
     student_tree.column("Grades", width=150)
+    student_tree.rowconfigure(2, weight=1)
 
     for student in data_manager.students:
         grade_info = []
-        for grade in student.grades:
-            grade_info.append(f"Class: {grade['class_id']} Grade: {grade['grade']}")
-        student_tree.insert("", "end", values=(student.id, student.full_name(), ", ".join([class_.name for class_ in data_manager.classes if student.id in class_.student_ids]), ", ".join(grade_info)))
+        classes_names = []
+        for classes in student.classes:
+            grade_info.append(f"{classes['class_name']} Grade: {classes['grade']}")
+            classes_names.append(f"{classes['class_name']}")
+
+        student_tree.insert("", "end", values=(student.id, student.full_name(), ", ".join(classes_names), ", ".join(grade_info)))
