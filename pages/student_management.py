@@ -113,7 +113,7 @@ def edit_student(callbacks, data_manager, student_id):
 
     add_class_button = Button(edit_student_frame, text="Add Class", command=lambda: add_or_remove_class("add", data_manager, student_id, current_selected_student_info_treeview, classes_option_menu_for_classes))
     remove_class_button = Button(edit_student_frame, text="Remove Class", command=lambda: add_or_remove_class("remove", data_manager, student_id, current_selected_student_info_treeview, classes_option_menu_for_classes))
-    add_grades_button = Button(edit_student_frame, text="Change Grades", command=lambda: add_grades(data_manager, student_id, current_selected_student_info_treeview, classes_option_menu_for_grades, grades_option_menu))
+    add_grades_button = Button(edit_student_frame, text="Change Grades", command=lambda: change_grades(data_manager, student_id, current_selected_student_info_treeview, classes_option_menu_for_grades, grades_option_menu))
 
     classes_option_menu_for_classes.place(relx=0.5, rely=0.3, relwidth=0.1, relheight=0.05, anchor=CENTER)
     classes_option_menu_for_grades.place(relx=0.45, rely=0.45, relwidth=0.1, relheight=0.05, anchor=CENTER)
@@ -140,7 +140,7 @@ def add_or_remove_class(add_or_remove, data_manager, student_id, student_list, c
                         student.classes = [c for c in student.classes if c['class_id'] != class_id]
                         data_manager.save_student_info()
                         messagebox.showinfo("Class Removed", f"Removed {class_name} from {student.full_name()}.")
-                        reload_student_list(data_manager, student_list)
+                        reload_solo_student_info(data_manager, student_id, student_list)
                         break
                 else:
                     if add_or_remove == "remove":
@@ -150,10 +150,10 @@ def add_or_remove_class(add_or_remove, data_manager, student_id, student_list, c
                         student.classes.append({"class_id": class_id, "class_name": class_name, "grade": "N/A"})
                         data_manager.save_student_info()
                         messagebox.showinfo("Class Added", f"Added {class_name} to {student.full_name()}.")
-                        reload_student_list(data_manager, student_list)
+                        reload_solo_student_info(data_manager, student_id, student_list)
                         break
 
-def add_grades(data_manager, student_id, student_list, classes_option_menu, grades_option_menu):
+def change_grades(data_manager, student_id, student_list, classes_option_menu, grades_option_menu):
     selected_class = classes_option_menu.cget("text")
     selected_grade = grades_option_menu.cget("text")
     print(f"Selected class from dropdown: {selected_class}")
@@ -162,6 +162,7 @@ def add_grades(data_manager, student_id, student_list, classes_option_menu, grad
         print(f"Selected class ID: {class_id}, Selected grade: {selected_grade}")
         for student in data_manager.students:
             if student.id == student_id:
+                found = 0
                 for classes in student.classes:
                     print(f"Comparing {class_id} with {classes['class_id']}")
                     if classes['class_id'] == class_id:
@@ -169,10 +170,10 @@ def add_grades(data_manager, student_id, student_list, classes_option_menu, grad
                         data_manager.save_student_info()
                         messagebox.showinfo("Grade Updated", f"Updated grade for {selected_class.split(' (ID:')[0]} to {selected_grade} for {student.full_name()}.")
                         reload_student_list(data_manager, student_list)
-                        return
-                    else:
+                        found += 1
+                if found == 0:
                         messagebox.showwarning("Class Not Found", f"{student.full_name()} is not enrolled in {selected_class.split(' (ID:')[0]}.")
-                        return
+    reload_solo_student_info(data_manager, student_id, student_list)
 
 def remove_student(data_manager, student_id, student_list):
     student_to_remove = next((student for student in data_manager.students if student.id == student_id), None)
@@ -186,12 +187,23 @@ def add_student(data_manager, add_student_inputs, student_list):
     first_name = add_student_inputs[0].get()
     last_name = add_student_inputs[1].get()
     new_id = max(student.id for student in data_manager.students) + 1 if data_manager.students else 1
-    data_manager.students.append(Student(id=new_id, first_name=first_name.capitalize(), last_name=last_name.capitalize(), grades=[]))
+    data_manager.students.append(Student(id=new_id, first_name=first_name.capitalize(), last_name=last_name.capitalize(), classes=[]))
     data_manager.save_student_info()
     print(f"Added student: {first_name} {last_name} with ID {new_id}")
     reload_student_list(data_manager, student_list)
     for entry in add_student_inputs:
         entry.delete(0, END)
+
+def reload_solo_student_info(data_manager, student_id, current_selected_student_info_treeview):
+    current_selected_student_info_treeview.delete(*current_selected_student_info_treeview.get_children())
+    for student in data_manager.students:
+        if student.id == student_id:
+            grade_info = []
+            classes_info = []
+            for classes in student.classes:
+                grade_info.append(f"Class: {classes['class_id']} Grade: {classes['grade']}")
+                classes_info.append(f"{classes['class_name']} (ID: {classes['class_id']})")
+            current_selected_student_info_treeview.insert("", "end", values=(student.id, student.full_name(), ", ".join(classes_info), ", ".join(grade_info)))
 
 def reload_student_list(data_manager, student_list):
     student_list.delete(*student_list.get_children())

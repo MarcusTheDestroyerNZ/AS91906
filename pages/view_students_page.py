@@ -23,7 +23,7 @@ def load_view_students_page(frame, data_manager, callbacks):
         grade_info = []
         classes_names = []
         for classes in student.classes:
-            grade_info.append(f"{classes['class_name']} Grade: {classes['grade']}")
+            grade_info.append(f"{classes['class_name']}: {classes['grade']}")
             classes_names.append(f"{classes['class_name']}")
 
         student_tree.insert("", "end", values=(student.id, student.full_name(), ", ".join(classes_names), ", ".join(grade_info)))

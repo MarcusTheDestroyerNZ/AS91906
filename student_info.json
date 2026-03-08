@@ -8,12 +8,17 @@
                 {
                     "class_id": 1,
                     "class_name": "Mathematics",
-                    "grade": "C"
+                    "grade": "A+"
                 },
                 {
                     "class_id": 2,
                     "class_name": "Science",
-                    "grade": "B"
+                    "grade": "A+"
+                },
+                {
+                    "class_id": 3,
+                    "class_name": "History",
+                    "grade": "A+"
                 }
             ]
         },
@@ -76,12 +81,29 @@
                 {
                     "class_id": 1,
                     "class_name": "Mathematics",
-                    "grade": "C"
+                    "grade": "A+"
                 },
                 {
                     "class_id": 2,
                     "class_name": "Science",
                     "grade": "B"
+                },
+                {
+                    "class_id": 3,
+                    "class_name": "History",
+                    "grade": "A+"
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "first_name": "Tom",
+            "last_name": "Clark",
+            "classes": [
+                {
+                    "class_id": 2,
+                    "class_name": "Science",
+                    "grade": "A+"
                 }
             ]
         }
