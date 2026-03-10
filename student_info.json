@@ -19,6 +19,11 @@
                     "class_id": 3,
                     "class_name": "History",
                     "grade": "A+"
+                },
+                {
+                    "class_id": 4,
+                    "class_name": "English",
+                    "grade": "A+"
                 }
             ]
         },
@@ -28,14 +33,9 @@
             "last_name": "Johnson",
             "classes": [
                 {
-                    "class_id": 1,
-                    "class_name": "Mathematics",
-                    "grade": "C"
-                },
-                {
                     "class_id": 2,
                     "class_name": "Science",
-                    "grade": "B"
+                    "grade": "E"
                 }
             ]
         },
@@ -64,45 +64,40 @@
                 {
                     "class_id": 1,
                     "class_name": "Mathematics",
-                    "grade": "C"
+                    "grade": "A-"
                 },
                 {
                     "class_id": 2,
                     "class_name": "Science",
-                    "grade": "B"
+                    "grade": "B+"
+                },
+                {
+                    "class_id": 4,
+                    "class_name": "English",
+                    "grade": "C+"
                 }
             ]
         },
         {
-            "id": 5,
-            "first_name": "Dyan",
-            "last_name": "B",
+            "id": 7,
+            "first_name": "Dylan",
+            "last_name": "Bertenshaw",
             "classes": [
                 {
-                    "class_id": 1,
-                    "class_name": "Mathematics",
-                    "grade": "A+"
-                },
-                {
-                    "class_id": 2,
-                    "class_name": "Science",
-                    "grade": "B"
-                },
+                    "class_id": 4,
+                    "class_name": "English",
+                    "grade": "E+"
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "first_name": "Thomas",
+            "last_name": "Clarke",
+            "classes": [
                 {
                     "class_id": 3,
                     "class_name": "History",
-                    "grade": "A+"
-                }
-            ]
-        },
-        {
-            "id": 6,
-            "first_name": "Tom",
-            "last_name": "Clark",
-            "classes": [
-                {
-                    "class_id": 2,
-                    "class_name": "Science",
                     "grade": "A+"
                 }
             ]
@@ -118,37 +113,33 @@
             "id": 2,
             "first_name": "John",
             "last_name": "Doe"
+        },
+        {
+            "id": 3,
+            "first_name": "Sarah",
+            "last_name": "Johnson"
         }
     ],
     "classes": [
         {
             "id": 1,
             "name": "Mathematics",
-            "teacher_id": 1,
-            "student_ids": [
-                1,
-                2,
-                4
-            ]
+            "teacher_id": 1
         },
         {
             "id": 2,
             "name": "Science",
-            "teacher_id": 2,
-            "student_ids": [
-                2,
-                3,
-                4
-            ]
+            "teacher_id": 2
         },
         {
             "id": 3,
             "name": "History",
-            "teacher_id": 1,
-            "student_ids": [
-                1,
-                3
-            ]
+            "teacher_id": 3
+        },
+        {
+            "id": 4,
+            "name": "English",
+            "teacher_id": 3
         }
     ]
 }

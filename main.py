@@ -2,15 +2,11 @@ from tkinter import *
 from data_manager import DataManager
 from pages.main_page import load_main_page
 from pages.student_management import load_student_management_page
-from pages.teacher_management_page import load_teacher_management_page
 from pages.view_students_page import load_view_students_page
-from pages.view_classes_page import load_view_classes_page
-from pages.edit_students_page import load_edit_students_page
 
 window = Tk()
 window.geometry("1280x720")
-window.title("Stu" \
-"dent Management System")
+window.title("Student Management System")
 window.config(background="grey")
 
 main_page_frame = Frame(window, bg="grey")
@@ -64,9 +60,6 @@ def load_pages():
 
     view_students_callbacks = {'back': open_main_page}
     load_view_students_page(view_students_frame, data_manager, view_students_callbacks)
-
-    edit_students_callbacks = {'back': open_student_management_page}
-    load_edit_students_page(edit_students_frame, data_manager, edit_students_callbacks)
 
 load_pages()
 show_frame(main_page_frame)

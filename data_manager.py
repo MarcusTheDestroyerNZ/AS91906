@@ -26,7 +26,6 @@ class Class:
     id: int
     name: str
     teacher_id: int
-    student_ids: List[int]
 
 class DataManager:
     def __init__(self):

@@ -1,101 +1,124 @@
-from tkinter import *
-from tkinter import simpledialog
-from tkinter.ttk import Treeview
+import tkinter
 from tkinter import messagebox
+from tkinter.ttk import Treeview
 
 from data_manager import Student
 
+""" This is the student management page, where you can add/remove students, edit their classes and grades, and view all of their information. """
+
 def load_student_management_page(frame, data_manager, callbacks):
+    """ This function loads the student management page and all of its components. """
+
+    """ Load student info to ensure we have the most up-to-date data when we enter the student management page. """
     data_manager.load_student_info()
 
-    back_button = Button(frame, text="Back", command=lambda: back_to_student_management(callbacks, frame))
-    back_button.place(relx=0.2, rely=0.1, relwidth=0.1, relheight=0.05, anchor=CENTER)
+    """ Back button to return to the main page. """
+    back_button = tkinter.Button(frame, text="Back", command=lambda: back_to_student_management(callbacks, frame))
+    back_button.place(relx=0.2, rely=0.1, relwidth=0.1, relheight=0.05, anchor=tkinter.CENTER)
 
-    title = Label(frame, text="Student Management Page")
+    """ Title for the student management page. """
+    title = tkinter.Label(frame, text="Student Management Page")
 
-    student_list_label = Label(frame, text="Students in School")
+    """ Title for the student list. """
+    student_list_label = tkinter.Label(frame, text="Students in School")
 
+    """ Treeview to display all students in the school. It has two columns: ID and Name. """
     headings = ["ID", "Name"]
     student_list = Treeview(frame, columns=("ID", "Name"), show="headings")
 
     for heading in headings:
         student_list.heading(heading, text=heading)
-    
     student_list.column("ID", width=1, stretch=True)
     student_list.column("Name", width=200, stretch=True)
 
+    """ Insert all students into the treeview. """
     for student in data_manager.students:
         student_list.insert("", "end", values=(student.id, student.full_name()))
 
-    edit_student_button = Button(frame, text="Edit", command=lambda: edit_student(callbacks, data_manager=data_manager, student_id=student_list.item(student_list.focus())['values'][0]))
-    remove_student_button = Button(frame, text="Remove", command=lambda: remove_student(data_manager, student_list.item(student_list.focus())['values'][0], student_list))
+    """ Buttons to edit and remove students. They are disabled by default and will be enabled when a student is selected from the treeview. """
+    edit_student_button = tkinter.Button(frame, text="Edit", command=lambda: edit_student(callbacks, data_manager=data_manager, student_id=student_list.item(student_list.focus())['values'][0]))
+    remove_student_button = tkinter.Button(frame, text="Remove", command=lambda: remove_student(data_manager, student_list.item(student_list.focus())['values'][0], student_list))
 
+    """ Here is where the edit and remove buttons are enabled/disabled based on whether a student is selected in the treeview. """
     student_list.bind("<<TreeviewSelect>>", lambda event: on_student_select(event, edit_student_button, remove_student_button))
-    edit_student_button.config(state=DISABLED)
-    remove_student_button.config(state=DISABLED)
+    edit_student_button.config(state=tkinter.DISABLED)
+    remove_student_button.config(state=tkinter.DISABLED)
 
-    title.place(relx=0.5, rely=0.1, relwidth=0.2, relheight=0.05, anchor=CENTER)
+    """ Labels and entry fields to add a new student. """
+    add_student_first_name_label = tkinter.Label(frame, text="First Name:")
+    add_student_last_name_label = tkinter.Label(frame, text="Last Name:")
 
-    student_list_label.place(relx=0.5, rely=0.2, relwidth=0.1, relheight=0.05, anchor=CENTER)
-    student_list.place(relx=0.5, rely=0.35, relwidth=0.2, relheight=0.2, anchor=CENTER)
-
-    edit_student_button.place(relx=0.4, rely=0.5, relwidth=0.1, relheight=0.05, anchor=CENTER)
-    remove_student_button.place(relx=0.6, rely=0.5, relwidth=0.1, relheight=0.05, anchor=CENTER)
-
-    add_student_first_name_label = Label(frame, text="First Name:")
-    add_student_last_name_label = Label(frame, text="Last Name:")
-
-    add_student_first_name_entry = Entry(frame)
-    add_student_last_name_entry = Entry(frame)
+    add_student_first_name_entry = tkinter.Entry(frame)
+    add_student_last_name_entry = tkinter.Entry(frame)
 
     add_student_inputs = [add_student_first_name_entry, add_student_last_name_entry]
 
-    add_student_button = Button(frame, text="Add Student", command=lambda: add_student(data_manager, add_student_inputs, student_list))
+    add_student_button = tkinter.Button(frame, text="Add Student", command=lambda: add_student(data_manager, add_student_inputs, student_list))
 
-    add_student_first_name_label.place(relx=0.45, rely=0.75, relwidth=0.1, relheight=0.05, anchor=CENTER)
-    add_student_last_name_label.place(relx=0.55, rely=0.75, relwidth=0.1, relheight=0.05, anchor=CENTER)
+    """ Place all the components on the frame. """
+    title.place(relx=0.5, rely=0.1, relwidth=0.2, relheight=0.05, anchor=tkinter.CENTER)
 
-    add_student_first_name_entry.place(relx=0.45, rely=0.8, relwidth=0.1, relheight=0.05, anchor=CENTER)
-    add_student_last_name_entry.place(relx=0.55, rely=0.8, relwidth=0.1, relheight=0.05, anchor=CENTER)
+    student_list_label.place(relx=0.5, rely=0.175, relwidth=0.1, relheight=0.05, anchor=tkinter.CENTER)
+    student_list.place(relx=0.5, rely=0.4, relwidth=0.2, relheight=0.4, anchor=tkinter.CENTER)
 
-    add_student_button.place(relx=0.5, rely=0.9, relwidth=0.1, relheight=0.05, anchor=CENTER)
+    edit_student_button.place(relx=0.4, rely=0.65, relwidth=0.1, relheight=0.05, anchor=tkinter.CENTER)
+    remove_student_button.place(relx=0.6, rely=0.65, relwidth=0.1, relheight=0.05, anchor=tkinter.CENTER)
+
+    add_student_first_name_label.place(relx=0.45, rely=0.75, relwidth=0.1, relheight=0.05, anchor=tkinter.CENTER)
+    add_student_last_name_label.place(relx=0.55, rely=0.75, relwidth=0.1, relheight=0.05, anchor=tkinter.CENTER)
+
+    add_student_first_name_entry.place(relx=0.45, rely=0.8, relwidth=0.1, relheight=0.05, anchor=tkinter.CENTER)
+    add_student_last_name_entry.place(relx=0.55, rely=0.8, relwidth=0.1, relheight=0.05, anchor=tkinter.CENTER)
+
+    add_student_button.place(relx=0.5, rely=0.9, relwidth=0.1, relheight=0.05, anchor=tkinter.CENTER)
 
 def on_student_select(event, edit_student_button, remove_student_button):
+    """ This function is called when a student is selected from the treeview. It enables the edit and remove buttons. If no student is selected, it disables the buttons. """
     selected_item = event.widget.selection()
     if selected_item:
-        edit_student_button.config(state=NORMAL)
-        remove_student_button.config(state=NORMAL)
+        """ If a student is selected, enable the edit and remove buttons. """
+        edit_student_button.config(state=tkinter.NORMAL)
+        remove_student_button.config(state=tkinter.NORMAL)
     else:
-        edit_student_button.config(state=DISABLED)
-        remove_student_button.config(state=DISABLED)
+        """ If no student is selected, disable the edit and remove buttons. """
+        edit_student_button.config(state=tkinter.DISABLED)
+        remove_student_button.config(state=tkinter.DISABLED)
 
 def edit_student(callbacks, data_manager, student_id):
+    """ This function is called when the edit button is clicked. It opens the edit student page for the selected student. """
+
+    """ Get the edit student frame from the callbacks. """
     edit_student_frame = callbacks['edit_student']
 
+    """ Get the full name of the student being edited. If the student is not found, use "Unknown Student". """
     student_name = next((student.full_name() for student in data_manager.students if student.id == student_id), "Unknown Student")
 
-    edit_student_label = Label(edit_student_frame, text=f"Editing {student_name}...")
-    edit_student_label.place(relx=0.5, rely=0.1, relwidth=0.3, relheight=0.05, anchor=CENTER)
+    """ Back button to return to the student management page. """
+    back_button = tkinter.Button(edit_student_frame, text="Back", command=lambda: back_to_student_management(callbacks, edit_student_frame))
+    back_button.place(relx=0.2, rely=0.1, relwidth=0.1, relheight=0.05, anchor=tkinter.CENTER)
+ 
+    edit_student_label = tkinter.Label(edit_student_frame, text=f"Editing {student_name}...")
+    edit_student_label.place(relx=0.5, rely=0.1, relwidth=0.3, relheight=0.05, anchor=tkinter.CENTER)
 
     headings = ["ID", "Name", "Classes", "Grades"]
     current_selected_student_info_treeview = Treeview(edit_student_frame, columns=headings, show="headings")
 
     for heading in headings:
         current_selected_student_info_treeview.heading(heading, text=heading)
-        current_selected_student_info_treeview.column(heading, width=200, stretch=True)
-    current_selected_student_info_treeview.column("ID", width=1, stretch=True)
-    current_selected_student_info_treeview.column("Name", width=1, stretch=True)
+        current_selected_student_info_treeview.column(heading, width=1, stretch=True)
+    current_selected_student_info_treeview.column("Classes", width=275, stretch=True)
+    current_selected_student_info_treeview.column("Grades", width=275, stretch=True)
 
     for student in data_manager.students:
         if student.id == student_id:
             grade_info = []
             classes_info = []
             for classes in student.classes:
-                grade_info.append(f"Class: {classes['class_id']} Grade: {classes['grade']}")
+                grade_info.append(f"{classes['class_name']}: {classes['grade']}")
                 classes_info.append(f"{classes['class_name']} (ID: {classes['class_id']})")
             current_selected_student_info_treeview.insert("", "end", values=(student.id, student.full_name(), ", ".join(classes_info), ", ".join(grade_info)))
 
-    current_selected_student_info_treeview.place(relx=0.5, rely=0.2, relwidth=0.8, relheight=0.075, anchor=N)
+    current_selected_student_info_treeview.place(relx=0.5, rely=0.2, relwidth=0.8, relheight=0.075, anchor=tkinter.N)
 
     classes_options = [f"{class_.name} (ID: {class_.id})" for class_ in data_manager.classes]
     grades_options = [
@@ -107,23 +130,23 @@ def edit_student(callbacks, data_manager, student_id):
         "F+", "F", "F-"
     ]
 
-    classes_option_menu_for_classes = OptionMenu(edit_student_frame, StringVar(), *classes_options)
-    classes_option_menu_for_grades = OptionMenu(edit_student_frame, StringVar(), *classes_options)
-    grades_option_menu = OptionMenu(edit_student_frame, StringVar(), *grades_options)
+    classes_option_menu_for_classes = tkinter.OptionMenu(edit_student_frame, tkinter.StringVar(), *classes_options)
+    classes_option_menu_for_grades = tkinter.OptionMenu(edit_student_frame, tkinter.StringVar(), *classes_options)
+    grades_option_menu = tkinter.OptionMenu(edit_student_frame, tkinter.StringVar(), *grades_options)
 
-    add_class_button = Button(edit_student_frame, text="Add Class", command=lambda: add_or_remove_class("add", data_manager, student_id, current_selected_student_info_treeview, classes_option_menu_for_classes))
-    remove_class_button = Button(edit_student_frame, text="Remove Class", command=lambda: add_or_remove_class("remove", data_manager, student_id, current_selected_student_info_treeview, classes_option_menu_for_classes))
-    add_grades_button = Button(edit_student_frame, text="Change Grades", command=lambda: change_grades(data_manager, student_id, current_selected_student_info_treeview, classes_option_menu_for_grades, grades_option_menu))
+    add_class_button = tkinter.Button(edit_student_frame, text="Add Class", command=lambda: add_or_remove_class("add", data_manager, student_id, current_selected_student_info_treeview, classes_option_menu_for_classes))
+    remove_class_button = tkinter.Button(edit_student_frame, text="Remove Class", command=lambda: add_or_remove_class("remove", data_manager, student_id, current_selected_student_info_treeview, classes_option_menu_for_classes))
+    add_grades_button = tkinter.Button(edit_student_frame, text="Change Grades", command=lambda: change_grades(data_manager, student_id, current_selected_student_info_treeview, classes_option_menu_for_grades, grades_option_menu))
 
-    classes_option_menu_for_classes.place(relx=0.5, rely=0.3, relwidth=0.1, relheight=0.05, anchor=CENTER)
-    classes_option_menu_for_grades.place(relx=0.45, rely=0.45, relwidth=0.1, relheight=0.05, anchor=CENTER)
-    grades_option_menu.place(relx=0.55, rely=0.45, relwidth=0.1, relheight=0.05, anchor=CENTER)
+    classes_option_menu_for_classes.place(relx=0.5, rely=0.3, relwidth=0.1, relheight=0.05, anchor=tkinter.CENTER)
+    classes_option_menu_for_grades.place(relx=0.45, rely=0.45, relwidth=0.1, relheight=0.05, anchor=tkinter.CENTER)
+    grades_option_menu.place(relx=0.55, rely=0.45, relwidth=0.1, relheight=0.05, anchor=tkinter.CENTER)
 
-    add_class_button.place(relx=0.45,rely=0.35, relwidth=0.1, relheight=0.05, anchor=CENTER)
-    remove_class_button.place(relx=0.55, rely=0.35, relwidth=0.1, relheight=0.05, anchor=CENTER)
-    add_grades_button.place(relx=0.5, rely=0.5, relwidth=0.1, relheight=0.05, anchor=CENTER)
+    add_class_button.place(relx=0.45,rely=0.35, relwidth=0.1, relheight=0.05, anchor=tkinter.CENTER)
+    remove_class_button.place(relx=0.55, rely=0.35, relwidth=0.1, relheight=0.05, anchor=tkinter.CENTER)
+    add_grades_button.place(relx=0.5, rely=0.5, relwidth=0.1, relheight=0.05, anchor=tkinter.CENTER)
 
-    edit_student_frame.place(relx=0.5, rely=0.5, relwidth=1, relheight=1, anchor=CENTER)
+    edit_student_frame.place(relx=0.5, rely=0.5, relwidth=1, relheight=1, anchor=tkinter.CENTER)
 
 def add_or_remove_class(add_or_remove, data_manager, student_id, student_list, class_option_menu):
     selected_class = class_option_menu.cget("text")
@@ -180,8 +203,8 @@ def remove_student(data_manager, student_id, student_list):
     if student_to_remove:
         data_manager.students.remove(student_to_remove)
         data_manager.save_student_info()
-        print(f"Removed student: {student_to_remove.full_name()} with ID {student_id}")
         reload_student_list(data_manager, student_list)
+        messagebox.showinfo("Student Removed", f"Removed {student_to_remove.full_name()} from the system.")
 
 def add_student(data_manager, add_student_inputs, student_list):
     first_name = add_student_inputs[0].get()
@@ -189,10 +212,10 @@ def add_student(data_manager, add_student_inputs, student_list):
     new_id = max(student.id for student in data_manager.students) + 1 if data_manager.students else 1
     data_manager.students.append(Student(id=new_id, first_name=first_name.capitalize(), last_name=last_name.capitalize(), classes=[]))
     data_manager.save_student_info()
-    print(f"Added student: {first_name} {last_name} with ID {new_id}")
+    messagebox.showinfo("Student Added", f"Added {first_name} {last_name} to the system with ID {new_id}.")
     reload_student_list(data_manager, student_list)
     for entry in add_student_inputs:
-        entry.delete(0, END)
+        entry.delete(0, tkinter.END)
 
 def reload_solo_student_info(data_manager, student_id, current_selected_student_info_treeview):
     current_selected_student_info_treeview.delete(*current_selected_student_info_treeview.get_children())
@@ -201,7 +224,7 @@ def reload_solo_student_info(data_manager, student_id, current_selected_student_
             grade_info = []
             classes_info = []
             for classes in student.classes:
-                grade_info.append(f"Class: {classes['class_id']} Grade: {classes['grade']}")
+                grade_info.append(f"{classes['class_name']}: {classes['grade']}")
                 classes_info.append(f"{classes['class_name']} (ID: {classes['class_id']})")
             current_selected_student_info_treeview.insert("", "end", values=(student.id, student.full_name(), ", ".join(classes_info), ", ".join(grade_info)))
 
