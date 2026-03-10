@@ -96,10 +96,13 @@ def edit_student(callbacks, data_manager, student_id):
     """ Back button to return to the student management page. """
     back_button = tkinter.Button(edit_student_frame, text="Back", command=lambda: back_to_student_management(callbacks, edit_student_frame))
     back_button.place(relx=0.2, rely=0.1, relwidth=0.1, relheight=0.05, anchor=tkinter.CENTER)
- 
+
+    """ Label to display the name of the student being edited. """
     edit_student_label = tkinter.Label(edit_student_frame, text=f"Editing {student_name}...")
     edit_student_label.place(relx=0.5, rely=0.1, relwidth=0.3, relheight=0.05, anchor=tkinter.CENTER)
 
+    """ Treeview to display the current classes and grades of the student being edited. 
+    It has four columns: ID, Name, Classes, and Grades. """
     headings = ["ID", "Name", "Classes", "Grades"]
     current_selected_student_info_treeview = Treeview(edit_student_frame, columns=headings, show="headings")
 
@@ -109,6 +112,7 @@ def edit_student(callbacks, data_manager, student_id):
     current_selected_student_info_treeview.column("Classes", width=275, stretch=True)
     current_selected_student_info_treeview.column("Grades", width=275, stretch=True)
 
+    """ Insert the current classes and grades of the student being edited into the treeview. """
     for student in data_manager.students:
         if student.id == student_id:
             grade_info = []
@@ -120,7 +124,9 @@ def edit_student(callbacks, data_manager, student_id):
 
     current_selected_student_info_treeview.place(relx=0.5, rely=0.2, relwidth=0.8, relheight=0.075, anchor=tkinter.N)
 
-    classes_options = [f"{class_.name} (ID: {class_.id})" for class_ in data_manager.classes]
+    """ Options for the dropdown menus to add/remove classes and change grades. 
+    The classes options are generated from the classes in the data manager, and the grades options are hardcoded. """
+    classes_options = [f"{classes.name} (ID: {classes.id})" for classes in data_manager.classes]
     grades_options = [
         "A+", "A", "A-", 
         "B+", "B", "B-", 
@@ -130,14 +136,17 @@ def edit_student(callbacks, data_manager, student_id):
         "F+", "F", "F-"
     ]
 
+    """ Dropdown menus to add/remove classes and change grades. """
     classes_option_menu_for_classes = tkinter.OptionMenu(edit_student_frame, tkinter.StringVar(), *classes_options)
     classes_option_menu_for_grades = tkinter.OptionMenu(edit_student_frame, tkinter.StringVar(), *classes_options)
     grades_option_menu = tkinter.OptionMenu(edit_student_frame, tkinter.StringVar(), *grades_options)
 
+    """ Buttons to add/remove classes and change grades. They call the respective functions when clicked. """
     add_class_button = tkinter.Button(edit_student_frame, text="Add Class", command=lambda: add_or_remove_class("add", data_manager, student_id, current_selected_student_info_treeview, classes_option_menu_for_classes))
     remove_class_button = tkinter.Button(edit_student_frame, text="Remove Class", command=lambda: add_or_remove_class("remove", data_manager, student_id, current_selected_student_info_treeview, classes_option_menu_for_classes))
     add_grades_button = tkinter.Button(edit_student_frame, text="Change Grades", command=lambda: change_grades(data_manager, student_id, current_selected_student_info_treeview, classes_option_menu_for_grades, grades_option_menu))
 
+    """ Place the dropdown menus and buttons on the frame. """
     classes_option_menu_for_classes.place(relx=0.5, rely=0.3, relwidth=0.1, relheight=0.05, anchor=tkinter.CENTER)
     classes_option_menu_for_grades.place(relx=0.45, rely=0.45, relwidth=0.1, relheight=0.05, anchor=tkinter.CENTER)
     grades_option_menu.place(relx=0.55, rely=0.45, relwidth=0.1, relheight=0.05, anchor=tkinter.CENTER)
@@ -149,57 +158,111 @@ def edit_student(callbacks, data_manager, student_id):
     edit_student_frame.place(relx=0.5, rely=0.5, relwidth=1, relheight=1, anchor=tkinter.CENTER)
 
 def add_or_remove_class(add_or_remove, data_manager, student_id, student_list, class_option_menu):
+    """ This function is called when the add/remove class buttons are clicked. 
+    It adds or removes the selected class from the student's classes based on the add_or_remove parameter. """
     selected_class = class_option_menu.cget("text")
+
+    """ If a class is selected from the dropdown menu, proceed with adding or removing the class. 
+    If no class is selected, show a warning message. """
     if selected_class:
+        """ The class ID is extracted from the selected class string, and the class name is also extracted for use in messages. """
         class_id = int(selected_class.split("ID: ")[1].rstrip(")"))
         class_name = selected_class.split(" (ID:")[0]
+
+        """ Loop through the students in the data manager to find the student being edited. """
         for student in data_manager.students:
+            """ 
+            If the student is found, check if the selected class is already in the student's classes. 
+            If it is, either show a warning message (if adding) or remove the class (if removing). 
+            If the class is not in the student's classes, either show a warning message (if removing) 
+            or add the class (if adding). After adding or removing the class, save the student info and 
+            show an info message. Finally, reload the student's info in the treeview to reflect the changes.
+            """
+
+            """ Check if the current student in the loop is the student being edited. """
             if student.id == student_id:
+                """ Check if the selected class is already in the student's classes. """
                 if any(c['class_id'] == class_id for c in student.classes):
+                    """ If the class is already in the student's classes and the add_or_remove parameter is "add", show a warning message. """
                     if add_or_remove == "add":
+                        """ If the class is already in the student's classes and the add_or_remove parameter is "add", show a warning message and return."""
                         messagebox.showwarning("Class Exists", f"{student.full_name()} is already enrolled in {class_name}.")
                         return
                     else:
-                        student.classes = [c for c in student.classes if c['class_id'] != class_id]
-                        data_manager.save_student_info()
-                        messagebox.showinfo("Class Removed", f"Removed {class_name} from {student.full_name()}.")
-                        reload_solo_student_info(data_manager, student_id, student_list)
-                        break
+                        """ If the class is already in the student's classes and the add_or_remove parameter is "remove", 
+                        remove the class from the student's classes, save the student info, show an info message, 
+                        and reload the student's info in the treeview. 
+                        """
+                        confirm = messagebox.askokcancel(f"Do you want to remove {class_name}?", f"Remove {class_name} from {student.full_name()}?")
+                        if confirm:
+                            student.classes = [c for c in student.classes if c['class_id'] != class_id]
+                            data_manager.save_student_info()
+                            reload_solo_student_info(data_manager, student_id, student_list)
+                            break
                 else:
                     if add_or_remove == "remove":
+                        """ If the class is not in the student's classes and the add_or_remove parameter is "remove", show a warning message and return."""
                         messagebox.showwarning("Class Not Found", f"{student.full_name()} is not enrolled in {class_name}.")
                         return
                     else:
-                        student.classes.append({"class_id": class_id, "class_name": class_name, "grade": "N/A"})
-                        data_manager.save_student_info()
-                        messagebox.showinfo("Class Added", f"Added {class_name} to {student.full_name()}.")
-                        reload_solo_student_info(data_manager, student_id, student_list)
-                        break
+                        """ If the class is not in the student's classes and the add_or_remove parameter is "add", 
+                        add the class to the student's classes, save the student info, 
+                        show an info message, and reload the student's info in the treeview. 
+                        """
+                        confirm = messagebox.askokcancel(f"Do you want to add {class_name}?", f"Add {class_name} to {student.full_name()}?")
+                        if confirm:
+                            student.classes.append({"class_id": class_id, "class_name": class_name, "grade": "N/A"})
+                            data_manager.save_student_info()
+                            reload_solo_student_info(data_manager, student_id, student_list)
+                            break
 
 def change_grades(data_manager, student_id, student_list, classes_option_menu, grades_option_menu):
+    """ This function is called when the change grades button is clicked. 
+    It changes the grade of the selected class for the student being edited to the selected grade. """
+
     selected_class = classes_option_menu.cget("text")
     selected_grade = grades_option_menu.cget("text")
-    print(f"Selected class from dropdown: {selected_class}")
+    """ If a class and grade are selected from the dropdown menus, proceed with changing the grade. """
     if selected_class and selected_grade:
+        """ The class ID is extracted from the selected class string. """
         class_id = int(selected_class.split("ID: ")[1].rstrip(")"))
-        print(f"Selected class ID: {class_id}, Selected grade: {selected_grade}")
+        """ Loop through the students in the data manager to find the student being edited. """
         for student in data_manager.students:
+            """ If the student is found, check if the selected class is in the student's classes."""
             if student.id == student_id:
                 found = 0
+                """ Loop through the student's classes to find the selected class. """
                 for classes in student.classes:
-                    print(f"Comparing {class_id} with {classes['class_id']}")
+                    """ If the selected class is found in the student's classes... """
                     if classes['class_id'] == class_id:
+                        """ ...change the grade of the class to the selected grade, save the student info, 
+                        show an info message and reload the student's info in the treeview.
+                        """
+                        confirm = messagebox.askokcancel("Grade Updated", f"Updated grade for {selected_class.split(' (ID:')[0]} to {selected_grade} for {student.full_name()}.")
+                        if not confirm:
+                            return
                         classes['grade'] = selected_grade
                         data_manager.save_student_info()
-                        messagebox.showinfo("Grade Updated", f"Updated grade for {selected_class.split(' (ID:')[0]} to {selected_grade} for {student.full_name()}.")
                         reload_student_list(data_manager, student_list)
                         found += 1
                 if found == 0:
+                        """ If the selected class is not found in the student's classes, show a warning message. """
                         messagebox.showwarning("Class Not Found", f"{student.full_name()} is not enrolled in {selected_class.split(' (ID:')[0]}.")
     reload_solo_student_info(data_manager, student_id, student_list)
 
 def remove_student(data_manager, student_id, student_list):
+    """ This function is called when the remove button is clicked. 
+    It removes the selected student from the data manager, saves the student info, 
+    shows an info message, and reloads the student list in the treeview. 
+    """
+
+    """ Find the student to remove from the data manager's students list using the student ID. """
     student_to_remove = next((student for student in data_manager.students if student.id == student_id), None)
+
+    """ If the student to remove is found, remove the student from the data manager's students list, 
+    save the student info, show an info message, and reload the student list in the treeview. 
+    If the student is not found, do nothing.
+    """
     if student_to_remove:
         data_manager.students.remove(student_to_remove)
         data_manager.save_student_info()
@@ -207,6 +270,9 @@ def remove_student(data_manager, student_id, student_list):
         messagebox.showinfo("Student Removed", f"Removed {student_to_remove.full_name()} from the system.")
 
 def add_student(data_manager, add_student_inputs, student_list):
+    """ This function is called when the add student button is clicked. 
+    It adds a new student with the entered first and last name to the data manager, saves the student info, shows an info message, and reloads the student list in the treeview.
+    """
     first_name = add_student_inputs[0].get()
     last_name = add_student_inputs[1].get()
     new_id = max(student.id for student in data_manager.students) + 1 if data_manager.students else 1

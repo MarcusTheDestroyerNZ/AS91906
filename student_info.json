@@ -36,6 +36,11 @@
                     "class_id": 2,
                     "class_name": "Science",
                     "grade": "E"
+                },
+                {
+                    "class_id": 4,
+                    "class_name": "English",
+                    "grade": "C+"
                 }
             ]
         },
@@ -79,7 +84,7 @@
             ]
         },
         {
-            "id": 7,
+            "id": 5,
             "first_name": "Dylan",
             "last_name": "Bertenshaw",
             "classes": [
@@ -87,11 +92,26 @@
                     "class_id": 4,
                     "class_name": "English",
                     "grade": "E+"
+                },
+                {
+                    "class_id": 3,
+                    "class_name": "History",
+                    "grade": "C-"
+                },
+                {
+                    "class_id": 1,
+                    "class_name": "Mathematics",
+                    "grade": "A+"
+                },
+                {
+                    "class_id": 2,
+                    "class_name": "Science",
+                    "grade": "B-"
                 }
             ]
         },
         {
-            "id": 8,
+            "id": 6,
             "first_name": "Thomas",
             "last_name": "Clarke",
             "classes": [
@@ -99,6 +119,33 @@
                     "class_id": 3,
                     "class_name": "History",
                     "grade": "A+"
+                },
+                {
+                    "class_id": 1,
+                    "class_name": "Mathematics",
+                    "grade": "F-"
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "first_name": "Ben",
+            "last_name": "Lawrence",
+            "classes": [
+                {
+                    "class_id": 1,
+                    "class_name": "Mathematics",
+                    "grade": "B"
+                },
+                {
+                    "class_id": 2,
+                    "class_name": "Science",
+                    "grade": "B-"
+                },
+                {
+                    "class_id": 3,
+                    "class_name": "History",
+                    "grade": "C-"
                 }
             ]
         }
