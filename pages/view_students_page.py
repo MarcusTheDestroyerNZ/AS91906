@@ -1,8 +1,9 @@
 from tkinter import *
 from tkinter import ttk
 
+
 def load_view_students_page(frame, data_manager, callbacks):
-    back_button = Button(frame, text="Back", command=callbacks['back'])
+    back_button = Button(frame, text="Back", command=callbacks["back"])
     back_button.place(relx=0.2, rely=0.1, relwidth=0.1, relheight=0.05, anchor=CENTER)
 
     title = Label(frame, text="View Students Page")
@@ -26,4 +27,13 @@ def load_view_students_page(frame, data_manager, callbacks):
             grade_info.append(f"{classes['class_name']}: {classes['grade']}")
             classes_names.append(f"{classes['class_name']}")
 
-        student_tree.insert("", "end", values=(student.id, student.full_name(), ", ".join(classes_names), ", ".join(grade_info)))
+        student_tree.insert(
+            "",
+            "end",
+            values=(
+                student.id,
+                student.full_name(),
+                ", ".join(classes_names),
+                ", ".join(grade_info),
+            ),
+        )

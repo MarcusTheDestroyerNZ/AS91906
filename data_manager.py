@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 import json
-from typing import List
+
 
 @dataclass
 class Student:
@@ -12,6 +12,7 @@ class Student:
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
 
+
 @dataclass
 class Teacher:
     id: int
@@ -21,11 +22,13 @@ class Teacher:
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
 
+
 @dataclass
 class Class:
     id: int
     name: str
     teacher_id: int
+
 
 class DataManager:
     def __init__(self):
@@ -50,7 +53,7 @@ class DataManager:
         data = {
             "students": [student.__dict__ for student in self.students],
             "teachers": [teacher.__dict__ for teacher in self.teachers],
-            "classes": [class_.__dict__ for class_ in self.classes]
+            "classes": [class_.__dict__ for class_ in self.classes],
         }
         with open("student_info.json", "w") as file:
             json.dump(data, file, indent=4)
