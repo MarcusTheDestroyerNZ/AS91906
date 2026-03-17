@@ -1,18 +1,18 @@
-from tkinter import *
+import tkinter
 from tkinter import ttk
 
 
 def load_view_students_page(frame, data_manager, callbacks):
-    back_button = Button(frame, text="Back", command=callbacks["back"])
-    back_button.place(relx=0.2, rely=0.1, relwidth=0.1, relheight=0.05, anchor=CENTER)
+    back_button = tkinter.Button(frame, text="Back", command=callbacks["back"])
+    back_button.place(relx=0.2, rely=0.1, relwidth=0.1, relheight=0.05, anchor=tkinter.CENTER)
 
-    title = Label(frame, text="View Students Page")
-    title.place(relx=0.5, rely=0.1, relwidth=0.2, relheight=0.05, anchor=CENTER)
+    title = tkinter.Label(frame, text="View Students Page")
+    title.place(relx=0.5, rely=0.1, relwidth=0.2, relheight=0.05, anchor=tkinter.CENTER)
 
     headings = ["ID", "Name", "Classes", "Grades"]
 
     student_tree = ttk.Treeview(frame, columns=headings, show="headings")
-    student_tree.place(relx=0.5, rely=0.3, relwidth=0.8, relheight=0.6, anchor=N)
+    student_tree.place(relx=0.5, rely=0.3, relwidth=0.8, relheight=0.6, anchor=tkinter.N)
 
     for heading in headings:
         student_tree.heading(heading, text=heading)

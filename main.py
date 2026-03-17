@@ -1,20 +1,20 @@
-from tkinter import *
+import tkinter
 from data_manager import DataManager
 from pages.main_page import load_main_page
 from pages.student_management import load_student_management_page
 from pages.view_students_page import load_view_students_page
 
-window = Tk()
+window = tkinter.Tk()
 window.geometry("1280x720")
 window.title("Student Management System")
 window.config(background="grey")
 
-main_page_frame = Frame(window, bg="grey")
-student_management_frame = Frame(window, bg="grey")
-teacher_management_frame = Frame(window, bg="grey")
-view_students_frame = Frame(window, bg="grey")
-view_classes_frame = Frame(window, bg="grey")
-edit_students_frame = Frame(window, bg="grey")
+main_page_frame = tkinter.Frame(window, bg="grey")
+student_management_frame = tkinter.Frame(window, bg="grey")
+teacher_management_frame = tkinter.Frame(window, bg="grey")
+view_students_frame = tkinter.Frame(window, bg="grey")
+view_classes_frame = tkinter.Frame(window, bg="grey")
+edit_students_frame = tkinter.Frame(window, bg="grey")
 
 frames = {
     "main": main_page_frame,
@@ -28,7 +28,7 @@ place_frame_values = {
     "rely": 0.5,
     "relwidth": 1,
     "relheight": 1,
-    "anchor": CENTER,
+    "anchor": tkinter.CENTER,
 }
 
 data_manager = DataManager()

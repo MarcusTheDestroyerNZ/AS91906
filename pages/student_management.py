@@ -154,7 +154,7 @@ def edit_student(callbacks, data_manager, student_id):
     back_button = tkinter.Button(
         edit_student_frame,
         text="Back",
-        command=lambda: back_to_student_management(callbacks, edit_student_frame),
+        command=lambda: back_to_student_management(edit_student_frame),
     )
     back_button.place(
         relx=0.2, rely=0.1, relwidth=0.1, relheight=0.05, anchor=tkinter.CENTER
@@ -532,5 +532,5 @@ def back_to_main_menu(callbacks, student_management_frame):
     callbacks["back"]()
 
 
-def back_to_student_management(callbacks, edit_student_frame):
+def back_to_student_management(edit_student_frame):
     edit_student_frame.place_forget()
