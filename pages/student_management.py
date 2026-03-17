@@ -13,7 +13,7 @@ def load_student_management_page(frame, data_manager, callbacks):
     data_manager.load_student_info()
 
     """ Back button to return to the main page. """
-    back_button = tkinter.Button(frame, text="Back", command=lambda: back_to_student_management(callbacks, frame))
+    back_button = tkinter.Button(frame, text="Back", command=lambda: back_to_main_menu(callbacks, frame))
     back_button.place(relx=0.2, rely=0.1, relwidth=0.1, relheight=0.05, anchor=tkinter.CENTER)
 
     """ Title for the student management page. """
@@ -275,6 +275,10 @@ def add_student(data_manager, add_student_inputs, student_list):
     """
     first_name = add_student_inputs[0].get()
     last_name = add_student_inputs[1].get()
+    if not first_name or not last_name:
+        """ If either the first name or last name entry is empty, show a warning message and return. """
+        messagebox.showwarning("Input Error", "Please enter both a first name and last name for the student.")
+        return
     new_id = max(student.id for student in data_manager.students) + 1 if data_manager.students else 1
     data_manager.students.append(Student(id=new_id, first_name=first_name.capitalize(), last_name=last_name.capitalize(), classes=[]))
     data_manager.save_student_info()
@@ -299,6 +303,9 @@ def reload_student_list(data_manager, student_list):
     for student in data_manager.students:
         student_list.insert("", "end", values=(student.id, student.full_name()))
 
+def back_to_main_menu(callbacks, student_management_frame):
+    student_management_frame.place_forget()
+    callbacks['back']()
+
 def back_to_student_management(callbacks, edit_student_frame):
     edit_student_frame.place_forget()
-    callbacks['back']()
