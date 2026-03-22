@@ -3,11 +3,14 @@ from tkinter import ttk
 
 
 def load_view_students_page(frame, data_manager, callbacks):
-    """This function loads the view students page. It displays a treeview that shows a list of students along with their classes and grades. The student data is retrieved from the data manager and displayed in the treeview."""
+    """This function loads the view students page. It displays a treeview that shows a list of students along with their classes and grades.
+    The student data is retrieved from the data manager and displayed in the treeview."""
 
     """The back button allows the user to return to the main menu."""
     back_button = tkinter.Button(frame, text="Back", command=callbacks["back"])
-    back_button.place(relx=0.2, rely=0.1, relwidth=0.1, relheight=0.05, anchor=tkinter.CENTER)
+    back_button.place(
+        relx=0.2, rely=0.1, relwidth=0.1, relheight=0.05, anchor=tkinter.CENTER
+    )
 
     """ Title label. """
     title = tkinter.Label(frame, text="View Students Page")
@@ -16,7 +19,9 @@ def load_view_students_page(frame, data_manager, callbacks):
     """ The treeview is set up with columns for ID, Name, Classes, and Grades. """
     headings = ["ID", "Name", "Classes", "Grades"]
     student_tree = ttk.Treeview(frame, columns=headings, show="headings")
-    student_tree.place(relx=0.5, rely=0.3, relwidth=0.8, relheight=0.6, anchor=tkinter.N)
+    student_tree.place(
+        relx=0.5, rely=0.3, relwidth=0.8, relheight=0.6, anchor=tkinter.N
+    )
 
     """ The treeview columns are configured with appropriate headings and widths. """
     for heading in headings:
