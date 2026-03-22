@@ -122,7 +122,8 @@ def load_student_management_page(frame, data_manager, callbacks):
 
 
 def on_student_select(event, edit_student_button, remove_student_button):
-    """This function is called when a student is selected from the treeview. It enables the edit and remove buttons. If no student is selected, it disables the buttons."""
+    """This function is called when a student is selected from the treeview. It enables the edit and remove buttons.
+    If no student is selected, it disables the buttons."""
     selected_item = event.widget.selection()
     if selected_item:
         """ If a student is selected, enable the edit and remove buttons. """
@@ -537,7 +538,8 @@ def reload_student_list(data_manager, student_list):
 
 
 def back_to_main_menu(callbacks, student_management_frame):
-    """This function is called when the back button is clicked on the student management page. It hides the student management frame and calls the back callback to return to the main menu."""
+    """This function is called when the back button is clicked on the student management page.
+    It hides the student management frame and calls the back callback to return to the main menu."""
     student_management_frame.place_forget()
     callbacks["back"]()
 
