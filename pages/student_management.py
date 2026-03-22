@@ -471,11 +471,13 @@ def add_student(data_manager, add_student_inputs, student_list):
             "Please enter both a first name and last name for the student.",
         )
         return
+    """ Generate a new unique ID for the student by finding the maximum existing student ID and adding 1. If there are no students, start with ID 1. """
     new_id = (
         max(student.id for student in data_manager.students) + 1
         if data_manager.students
         else 1
     )
+    """ Add the new student to the data manager's students list, save the student info, show an info message, and reload the student list in the treeview. """
     data_manager.students.append(
         Student(
             id=new_id,
@@ -489,6 +491,7 @@ def add_student(data_manager, add_student_inputs, student_list):
         "Student Added",
         f"Added {first_name} {last_name} to the system with ID {new_id}.",
     )
+    """ After adding the student, clear the input fields. The student list is reloaded to show the new student. """
     reload_student_list(data_manager, student_list)
     for entry in add_student_inputs:
         entry.delete(0, tkinter.END)
@@ -497,18 +500,22 @@ def add_student(data_manager, add_student_inputs, student_list):
 def reload_solo_student_info(
     data_manager, student_id, current_selected_student_info_treeview
 ):
+    """This function reloads the current selected student's info in the treeview. It is called after adding/removing classes or changing grades to reflect the changes in the treeview."""
     current_selected_student_info_treeview.delete(
         *current_selected_student_info_treeview.get_children()
     )
+    """ Loop through the students in the data manager to find the student being edited. If the student is found, extract the class and grade info and insert it into the treeview. """
     for student in data_manager.students:
         if student.id == student_id:
             grade_info = []
             classes_info = []
+            """ Loop through the student's classes to extract the class names and grades for display in the treeview. """
             for classes in student.classes:
                 grade_info.append(f"{classes['class_name']}: {classes['grade']}")
                 classes_info.append(
                     f"{classes['class_name']} (ID: {classes['class_id']})"
                 )
+            """ Insert the student's ID, full name, classes, and grades into the treeview. """
             current_selected_student_info_treeview.insert(
                 "",
                 "end",
@@ -522,15 +529,19 @@ def reload_solo_student_info(
 
 
 def reload_student_list(data_manager, student_list):
+    """This function reloads the student list in the treeview. It is called after adding/removing students to reflect the changes in the treeview."""
     student_list.delete(*student_list.get_children())
+    """ Loop through the students in the data manager and insert their ID and full name into the treeview. """
     for student in data_manager.students:
         student_list.insert("", "end", values=(student.id, student.full_name()))
 
 
 def back_to_main_menu(callbacks, student_management_frame):
+    """This function is called when the back button is clicked on the student management page. It hides the student management frame and calls the back callback to return to the main menu."""
     student_management_frame.place_forget()
     callbacks["back"]()
 
 
 def back_to_student_management(edit_student_frame):
+    """This function is called when the back button is clicked on the edit student page. It hides the edit student frame, showing the student management frame below."""
     edit_student_frame.place_forget()
