@@ -141,6 +141,11 @@
                     "class_id": 3,
                     "class_name": "History",
                     "grade": "C-"
+                },
+                {
+                    "class_id": 1,
+                    "class_name": "Mathematics",
+                    "grade": "A+"
                 }
             ]
         }
