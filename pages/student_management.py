@@ -335,7 +335,7 @@ def edit_student(callbacks, data_manager, student_id):
         edit_student_frame, tkinter.StringVar(), *grades_options
     )
 
-    """Buttons to add/remove classes and change grades. 
+    """Buttons to add/remove classes and change grades.
     They call the respective functions when clicked.
     """
     add_class_button = tkinter.Button(
@@ -619,7 +619,7 @@ def remove_student(data_manager, student_id, student_list):
 
     """If the student to remove is found, remove the student from the data
     manager's students list, save the student info, show an info message,
-    and reload the student list in the treeview. 
+    and reload the student list in the treeview.
     If the student is not found, do nothing.
     """
     if student_to_remove:
@@ -687,7 +687,7 @@ def reload_solo_student_info(
     data_manager, student_id, current_selected_student_info_treeview
 ):
     """Reload the current selected student's info in the treeview.
-    
+
     This function reloads the current selected student's info in the
     treeview. It is called after adding/removing classes or changing
     grades to reflect the changes in the treeview.
@@ -730,7 +730,7 @@ def reload_solo_student_info(
 
 def reload_student_list(data_manager, student_list):
     """Reload the student list in the treeview.
-    
+
     This function reloads the student list in the treeview. It is called
     after adding/removing students to reflect the changes in the treeview.
     """
@@ -745,17 +745,19 @@ def reload_student_list(data_manager, student_list):
 
 
 def back_to_main_menu(callbacks, student_management_frame):
-    """This function is called when the back button is clicked on the
-    student management page. It hides the student management frame and
-    calls the back callback to return to the main menu.
+    """Hide the student management frame and return to the main menu.
+
+    This function hides the student management frame and then calls the
+    back callback to return to the main menu.
     """
     student_management_frame.place_forget()
     callbacks["back"]()
 
 
 def back_to_student_management(edit_student_frame):
-    """This function is called when the back button is clicked on the
-    edit student page. It hides the edit student frame, showing the
+    """Hide the edit student frame and return to the student management page.
+
+    This function hides the edit student frame, showing the
     student management frame below.
     """
     edit_student_frame.place_forget()
